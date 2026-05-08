@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AZ TV — ERP Target Operating Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0C2340;--blue:#1558B0;--blue2:#1E72D4;--bl:#EEF5FD;--blb:#C2D8F5;
+  --green:#0F7A4A;--gl:#EAF5F0;--gb:#A8DFC4;
+  --red:#B02020;--rl:#FAEEEE;--rb:#F0BABA;
+  --gold:#8A6000;--gdl:#FDF5E0;--gdb:#F0D888;
+  --ora:#8A4800;--orl:#FDF0E4;--orb:#F0C890;
+  --gray:#5A6878;--grayl:#F4F6F8;--grayb:#D8E0E8;
+  --pur:#5030A0;--purl:#F0EEFF;--purb:#C8B8F0;
+  --border:#D8E2EC;--border2:#C0CEDC;
+  --text:#0C2340;--text2:#3A5068;--text3:#7A8FA0;
+  --bg:#EEF2F7;--surface:#FFFFFF;--surf2:#F6F9FC;
+  --font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+  --r:8px;--rl2:12px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
+.topnav{background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:.875rem 2rem;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(12,35,64,.3)}
+.brand{display:flex;align-items:center;gap:11px}
+.bmark{width:36px;height:36px;background:var(--blue2);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff}
+.bname{color:#fff;font-size:15px;font-weight:600}
+.bsub{color:rgba(255,255,255,.45);font-size:11px}
+.ntabs{display:flex;gap:3px;background:rgba(255,255,255,.1);border-radius:9px;padding:3px}
+.ntab{padding:.4rem 1.1rem;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;color:rgba(255,255,255,.6);border:none;background:none;font-family:var(--font);transition:all .18s;display:flex;align-items:center;gap:6px}
+.ntab:hover{color:rgba(255,255,255,.9)}
+.ntab.active{background:var(--blue2);color:#fff}
+.ntab i{font-size:14px}
+.page{display:none}
+.page.active{display:block;animation:fu .25s ease}
+@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.wrap{max-width:1320px;margin:0 auto;padding:1.75rem 2rem}
+.ph{margin-bottom:1.5rem}
+.ph h1{font-size:19px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:9px;margin-bottom:.3rem}
+.ph h1 i{color:var(--blue2);font-size:21px}
+.ph p{font-size:13px;color:var(--text3);line-height:1.6;max-width:700px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl2);box-shadow:0 1px 3px rgba(12,35,64,.07)}
+.card-hd{display:flex;align-items:center;justify-content:space-between;padding:.875rem 1.25rem;border-bottom:1px solid var(--border)}
+.ctitle{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);display:flex;align-items:center;gap:7px}
+.ctitle i{color:var(--blue2);font-size:14px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:.35rem .8rem;border-radius:6px;border:1px solid var(--border2);background:none;cursor:pointer;font-size:12px;color:var(--text2);font-family:var(--font)}
+.btn:hover{background:var(--surf2)}
+.hint{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--blue);background:var(--bl);border:1px solid var(--blb);border-radius:6px;padding:.35rem .75rem;margin-bottom:.875rem}
+.bc{display:flex;align-items:center;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap}
+.bc-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text3);cursor:pointer;padding:.3rem .6rem;border-radius:6px;transition:all .15s;font-weight:500}
+.bc-item:hover{background:var(--bl);color:var(--navy)}
+.bc-item.active{color:var(--navy);cursor:default}
+.bc-item.active:hover{background:none}
+.bc-item i{font-size:14px}
+.bc-sep{color:var(--border2);font-size:12px}
+.pnl-table{width:100%;border-collapse:collapse}
+.pnl-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);padding:.65rem 1rem;background:var(--surf2);border-bottom:2px solid var(--border);text-align:right;white-space:nowrap}
+.pnl-table th:first-child{text-align:left}
+.pnl-row{transition:background .12s}
+.pnl-row td{padding:.7rem 1rem;border-bottom:1px solid var(--border);vertical-align:middle}
+.pnl-row.clickable{cursor:pointer}
+.pnl-row.clickable:hover td{background:#EEF6FF}
+.pnl-row.clickable.sel td{background:#DBEAFE}
+.pnl-row.total td{background:var(--surf2);font-weight:700;border-top:2px solid var(--border2);color:var(--navy)}
+.pnl-row.subtotal td{background:#F8FAFC;font-weight:600;color:var(--text2)}
+.cost-label{display:flex;align-items:center;gap:10px}
+.cost-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.cost-name{font-weight:600;font-size:14px;color:var(--navy)}
+.cost-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.item-label{display:flex;align-items:center;gap:9px}
+.item-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.item-name{font-weight:600;font-size:13px}
+.item-sub{font-size:11px;color:var(--text3)}
+.ep-label{display:flex;align-items:center;gap:8px}
+.ep-badge{padding:.2rem .6rem;border-radius:12px;font-size:11px;font-weight:600;background:var(--bl);color:var(--navy);border:1px solid var(--blb)}
+.cc4-badge{padding:.2rem .6rem;border-radius:5px;font-size:10px;font-weight:600;background:var(--orl);color:var(--ora);border:1px solid var(--orb);white-space:nowrap}
+.num{font-family:var(--mono);font-size:13px;font-weight:500;text-align:right;color:var(--navy)}
+.num-muted{font-family:var(--mono);font-size:12px;color:var(--text3);text-align:right}
+.vpos{color:var(--green);font-weight:700;font-size:12px;font-family:var(--mono);text-align:right}
+.vneg{color:var(--red);font-weight:700;font-size:12px;font-family:var(--mono);text-align:right}
+.bar-cell{display:flex;align-items:center;gap:8px}
+.bar-wrap{flex:1;height:6px;border-radius:3px;background:var(--border);overflow:hidden;min-width:80px}
+.bar-fill{height:100%;border-radius:3px;transition:width .4s ease}
+.bar-pct{font-size:11px;font-weight:600;color:var(--text3);min-width:42px;text-align:right;font-family:var(--mono)}
+.ic-sal{background:#FDF5E0;color:#8A6000}
+.ic-lic{background:#EEF5FD;color:#1558B0}
+.ic-bro{background:#EAF5F0;color:#0F7A4A}
+.ic-nws{background:#FAEEEE;color:#B02020}
+.ic-utl{background:#FDF0E4;color:#8A4800}
+.ic-sec{background:#F4F6F8;color:#5A6878}
+.ic-bnk{background:#F0EEFF;color:#5030A0}
+.bar-sal{background:#E8B84B}
+.bar-lic{background:#1E72D4}
+.bar-bro{background:#26C07A}
+.bar-nws{background:#E05050}
+.bar-utl{background:#E89030}
+.bar-sec{background:#8090A0}
+.bar-bnk{background:#8070C8}
+.sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.sum-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl2);padding:1rem;box-shadow:0 1px 3px rgba(12,35,64,.05)}
+.sum-val{font-size:22px;font-weight:700;color:var(--navy);font-family:var(--mono);line-height:1;margin-bottom:3px}
+.sum-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);font-weight:600}
+.sum-sub{font-size:11px;color:var(--text2);margin-top:3px}
+.alloc-tag{display:inline-flex;align-items:center;gap:5px;padding:.25rem .6rem;border-radius:5px;font-size:11px;font-weight:500;border:1px solid}
+.at-off{background:var(--gdl);color:var(--gold);border-color:var(--gdb)}
+.at-pct{background:var(--bl);color:var(--navy);border-color:var(--blb)}
+.at-ch1{background:var(--rl);color:var(--red);border-color:var(--rb)}
+.at-co{background:var(--grayl);color:var(--gray);border-color:var(--grayb)}
+.gl-num{font-family:var(--mono);font-size:11px;font-weight:600;background:#F0F4FF;color:#2040A0;padding:.15rem .45rem;border-radius:4px;border:1px solid #C8D8F8;white-space:nowrap}
+/* Annex 2 */
+.rt{width:100%;border-collapse:collapse}
+.rt th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);padding:.6rem .9rem;background:var(--surf2);border-bottom:2px solid var(--border);text-align:right;white-space:nowrap}
+.rt th:first-child{text-align:left}
+.rt td{padding:.6rem .9rem;font-size:13px;border-bottom:1px solid var(--border);text-align:right;vertical-align:middle}
+.rt td:first-child{text-align:left}
+.rt tr.cr{cursor:pointer;transition:background .12s}
+.rt tr.cr:hover td{background:#EEF6FF}
+.rt tr.cr.sel td{background:#DBEAFE}
+.rt tr.totr td{background:var(--surf2);font-weight:700;border-top:2px solid var(--border2);color:var(--navy)}
+.act{font-weight:600;color:var(--navy);font-family:var(--mono);font-size:12px}
+.bud{color:var(--text3);font-family:var(--mono);font-size:12px}
+.vp2{color:var(--green);font-weight:700;font-size:12px}
+.vn2{color:var(--red);font-weight:700;font-size:12px}
+.ratw{display:flex;align-items:center;justify-content:flex-end;gap:6px}
+.ratb{height:5px;border-radius:3px;background:var(--border);width:55px;overflow:hidden}
+.ratf{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--blue2))}
+.ratv{font-size:12px;color:var(--blue2);font-family:var(--mono);font-weight:600;min-width:22px}
+.cg{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-top:1rem;border-radius:var(--r);overflow:hidden}
+.cc2x{background:var(--surf2);padding:.75rem;text-align:center}
+.cll{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;font-weight:600;line-height:1.4}
+.cvv{font-size:16px;font-weight:700;font-family:var(--mono)}
+.cpos{color:var(--green)}.cneg{color:var(--red)}
+.gl-dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:7px}
+.gls{background:var(--green)}.glr{background:var(--blue2)}.glsv{background:var(--gold)}.gld{background:var(--red)}
+.kgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:1.25rem}
+.kcard{background:var(--surf2);border:1px solid var(--border);border-radius:var(--r);padding:.875rem}
+.kval{font-size:20px;font-weight:700;color:var(--navy);line-height:1;margin-bottom:3px;font-family:var(--mono)}
+.klbl{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);font-weight:600}
+.ksub{font-size:11px;color:var(--text2);margin-top:3px}
+.tw2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;align-items:start}
+.pd2{display:none;animation:fu .2s ease;margin-bottom:1.25rem}
+.pd2.open{display:block}
+.ph-empty{padding:2.5rem 1.5rem;text-align:center;color:var(--text3)}
+.ph-empty i{font-size:28px;display:block;margin-bottom:.5rem;color:var(--border2)}
+.ph-empty p{font-size:13px}
+.slbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);margin-bottom:.625rem;display:flex;align-items:center;gap:6px}
+.slbl i{color:var(--blue2);font-size:13px}
+.note-strip{background:var(--gdl);border:1px solid var(--gdb);border-radius:var(--r);padding:.5rem .875rem;font-size:11px;color:var(--gold);display:flex;align-items:center;gap:7px;margin-bottom:1rem}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="brand">
+    <div class="bmark">AZ</div>
+    <div><div class="bname">AZ TV — ERP Target Operating Model</div><div class="bsub">Finance, Cost Controlling & Management Analytics · Demo</div></div>
+  </div>
+  <div class="ntabs">
+    <button class="ntab active" onclick="sp('a1')" id="t-a1"><i class="ti ti-chart-treemap"></i>Annex 1 — Cost Structure</button>
+    <button class="ntab" onclick="sp('a2')" id="t-a2"><i class="ti ti-chart-bar"></i>Annex 2 — Management Reports</button>
+  </div>
+</nav>
+
+<!-- ANNEX 1 -->
+<div class="page active" id="page-a1">
+<div class="wrap">
+  <div class="ph">
+    <h1><i class="ti ti-chart-treemap"></i>Cost Structure — P&L Drill-Down</h1>
+    <p>Click any cost category to drill into channel breakdown. Click a channel to see programme detail. Click a programme to see episode-level costs with CC4 department breakdown.</p>
+  </div>
+  <div class="note-strip"><i class="ti ti-link"></i>Figures are consistent with Annex 2. Total cost = 26,520 K AZN. All amounts in AZN '000.</div>
+  <div class="bc" id="a1-bc"></div>
+  <div class="sum-grid" id="a1-sum"></div>
+  <div class="card">
+    <div class="card-hd">
+      <div class="ctitle" id="a1-table-title"><i class="ti ti-table"></i>Total cost by category — AZ TV Group</div>
+      <span style="font-size:11px;color:var(--text3)" id="a1-table-sub">AZN '000 · Full year · Illustrative</span>
+    </div>
+    <div style="padding:.75rem 1.25rem .25rem"><div class="hint" id="a1-hint"><i class="ti ti-hand-click"></i>Click a cost category to see channel breakdown</div></div>
+    <table class="pnl-table" id="a1-table"></table>
+  </div>
+</div>
+</div>
+
+<!-- ANNEX 2 -->
+<div class="page" id="page-a2">
+<div class="wrap">
+  <div class="ph">
+    <h1><i class="ti ti-chart-dots"></i>Management Reporting — Actual vs Budget</h1>
+    <p>Three-level drill-down: entity → channel → programme. Figures are consistent with Annex 1 (total cost = 26,520 K AZN).</p>
+  </div>
+  <div class="note-strip"><i class="ti ti-link"></i>Same figures as Annex 1. Total entity cost 26,520 K AZN = sum of all channels and overhead.</div>
+  <div class="tw2">
+    <div class="card">
+      <div class="card-hd">
+        <div class="ctitle"><i class="ti ti-building"></i>Report of entity</div>
+        <span style="font-size:11px;color:var(--text3)">AZ TV · All units · AZN '000</span>
+      </div>
+      <div style="padding:0">
+        <div style="padding:.75rem 1.25rem .25rem"><div class="hint"><i class="ti ti-hand-click"></i>Click AZ TV, Mədəniyyət TV, or İdman TV</div></div>
+        <table class="rt" id="et"></table>
+        <div style="padding:.875rem 1.25rem;border-top:1px solid var(--border)">
+          <div class="slbl"><i class="ti ti-wallet"></i>Cash position — 31 March 2026</div>
+          <div class="cg">
+            <div class="cc2x"><div class="cll">Cash at bank (before payables)</div><div class="cvv cpos">5,000 K</div></div>
+            <div class="cc2x"><div class="cll">XYZ Projects payables</div><div class="cvv cneg">(2,000 K)</div></div>
+            <div class="cc2x"><div class="cll">Other payables</div><div class="cvv cneg">(500 K)</div></div>
+            <div class="cc2x"><div class="cll">Cash at bank (after payables)</div><div class="cvv cpos">2,500 K</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">
+        <div class="ctitle"><i class="ti ti-device-tv"></i><span id="ch-title">Report of channel</span></div>
+        <span style="font-size:11px;color:var(--text3)" id="ch-sub">Select a channel</span>
+      </div>
+      <div style="padding:0">
+        <div class="ph-empty" id="ch-ph"><i class="ti ti-arrow-left"></i><p>Select a channel from the entity report</p></div>
+        <div id="ch-ct" style="display:none">
+          <div style="padding:.75rem 1.25rem .25rem"><div class="hint"><i class="ti ti-hand-click"></i>Click a programme to see cost breakdown</div></div>
+          <table class="rt" id="cht"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pd2" id="pdd">
+    <div class="card">
+      <div class="card-hd">
+        <div class="ctitle"><i class="ti ti-player-play"></i><span id="pt">Programme report</span></div>
+        <button class="btn" onclick="closePD()"><i class="ti ti-x"></i>Close</button>
+      </div>
+      <div style="padding:1.25rem">
+        <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:1.5rem">
+          <div>
+            <div class="slbl"><i class="ti ti-receipt"></i>Cost breakdown by GL account · AZN '000</div>
+            <table class="rt" id="pct"></table>
+          </div>
+          <div>
+            <div class="slbl"><i class="ti ti-chart-pie"></i>Key performance indicators</div>
+            <div class="kgrid" id="pkpi"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+/* ============================================================
+   SHARED DATA — same numbers across Annex 1 and Annex 2
+   Total cost = 26,520 K AZN | Total budget = 25,350 K AZN
+   ============================================================ */
+
+// NAS/IFRS GL account numbers for Azerbaijan commercial entities
+const GL = {
+  salary:    { num:'7110', name:'Labour costs — wages and salaries' },
+  sspf:      { num:'7120', name:'Labour costs — employer social contributions' },
+  license:   { num:'7430', name:'Licences and royalties' },
+  broadcast: { num:'7440', name:'Broadcast and transmission costs' },
+  news:      { num:'7450', name:'News agency and content costs' },
+  utility:   { num:'7510', name:'Utilities (electricity, water, gas)' },
+  security:  { num:'7520', name:'Security services' },
+  bank:      { num:'7630', name:'Bank charges and commissions' },
+  rent:      { num:'7210', name:'Lease and rental expenses' },
+  deprec:    { num:'7310', name:'Depreciation — property, plant and equipment' },
+  service:   { num:'7460', name:'Production and technical services' },
+};
+
+// CC4 departments
+const CC4_DEPTS = ['News Editorial','Camera operators','Video editing (shared)','Graphics','Audio / Sound','Make-up & Wardrobe','Overhead'];
+
+const COST_TYPES = [
+  { id:'sal', name:'Salary Expense', icon:'ti-users', ic:'ic-sal', bar:'bar-sal',
+    alloc:'at-off', allocLbl:'Per employee per episode',
+    gl: GL.salary, gl2: GL.sspf,
+    total:14200, budget:13500,
+    desc:'Gross salary + employer SSPF. Allocated per employee per episode via WFM.',
+    channels:[
+      { id:'aztv', name:'AZTV', color:'#1558B0', total:5800, budget:5500,
+        progs:[
+          { id:'xeber', name:'AZTV Xəbər', total:1840, budget:2100,
+            eps:[
+              {ep:'Ep 01 · 02.01.2026', a:92, b:105, cc4:'News Editorial'},
+              {ep:'Ep 02 · 03.01.2026', a:88, b:105, cc4:'News Editorial'},
+              {ep:'Ep 03 · 04.01.2026', a:94, b:105, cc4:'Camera operators'},
+              {ep:'Ep 04 · 05.01.2026', a:90, b:105, cc4:'Video editing (shared)'},
+              {ep:'Ep 05 · 06.01.2026', a:96, b:105, cc4:'Audio / Sound'},
+            ]},
+          { id:'hedef', name:'Hədəf', total:1450, budget:1300,
+            eps:[
+              {ep:'Ep 01 · 05.01.2026', a:126, b:115, cc4:'News Editorial'},
+              {ep:'Ep 02 · 12.01.2026', a:118, b:115, cc4:'Camera operators'},
+              {ep:'Ep 03 · 19.01.2026', a:122, b:115, cc4:'Graphics'},
+              {ep:'Ep 04 · 26.01.2026', a:130, b:115, cc4:'News Editorial'},
+            ]},
+          { id:'busehr', name:'Bu Səhər', total:980, budget:900,
+            eps:[
+              {ep:'Ep 01 · 02.01.2026', a:48, b:45, cc4:'Camera operators'},
+              {ep:'Ep 02 · 09.01.2026', a:52, b:45, cc4:'Video editing (shared)'},
+              {ep:'Ep 03 · 16.01.2026', a:46, b:45, cc4:'Audio / Sound'},
+              {ep:'Ep 04 · 23.01.2026', a:50, b:45, cc4:'Camera operators'},
+            ]},
+          { id:'meqa', name:'Meqalayihə', total:620, budget:580, eps:[]},
+          { id:'other_a', name:'Other programmes', total:910, budget:870, eps:[]},
+        ]},
+      { id:'medeni', name:'Mədəniyyət TV', color:'#8A6000', total:3900, budget:4000,
+        progs:[
+          {id:'mugam',name:'Muğam Dünyası',total:1200,budget:1180,eps:[]},
+          {id:'ince',name:'İncəsənət',total:950,budget:1050,eps:[]},
+          {id:'film',name:'Film Gecəsi',total:780,budget:720,eps:[]},
+          {id:'other_m',name:'Other',total:970,budget:1050,eps:[]},
+        ]},
+      { id:'idman', name:'İdman TV', color:'#0F7A4A', total:2800, budget:2700,
+        progs:[
+          {id:'futbol',name:'Futbol Review',total:950,budget:900,eps:[]},
+          {id:'tennis',name:'Tennis Turniri',total:620,budget:600,eps:[]},
+          {id:'idman_x',name:'İdman Xəbərləri',total:480,budget:500,eps:[]},
+          {id:'other_i',name:'Other',total:750,budget:700,eps:[]},
+        ]},
+      { id:'radio', name:'Radios', color:'#B02020', total:1200, budget:1100, progs:[]},
+      { id:'social', name:'Social Media', color:'#5030A0', total:500, budget:200, progs:[]},
+    ]},
+  { id:'lic', name:'Licenses', icon:'ti-certificate', ic:'ic-lic', bar:'bar-lic',
+    alloc:'at-pct', allocLbl:'Predetermined % in ERP', gl: GL.license, gl2:null,
+    total:4200, budget:4000,
+    desc:'Software, broadcast and content licences.',
+    channels:[
+      {id:'aztv',name:'AZTV',color:'#1558B0',total:1800,budget:1700,progs:[]},
+      {id:'medeni',name:'Mədəniyyət TV',color:'#8A6000',total:900,budget:900,progs:[]},
+      {id:'idman',name:'İdman TV',color:'#0F7A4A',total:780,budget:750,progs:[]},
+      {id:'radio',name:'Radios',color:'#B02020',total:420,budget:400,progs:[]},
+      {id:'social',name:'Social Media',color:'#5030A0',total:300,budget:250,progs:[]},
+    ]},
+  { id:'bro', name:'Broadcast Expenses', icon:'ti-antenna', ic:'ic-bro', bar:'bar-bro',
+    alloc:'at-pct', allocLbl:'Airtime-based allocation', gl: GL.broadcast, gl2:null,
+    total:3800, budget:3600,
+    desc:'Transmission, satellite and technical broadcast costs.',
+    channels:[
+      {id:'aztv',name:'AZTV',color:'#1558B0',total:1900,budget:1800,progs:[]},
+      {id:'medeni',name:'Mədəniyyət TV',color:'#8A6000',total:800,budget:780,progs:[]},
+      {id:'idman',name:'İdman TV',color:'#0F7A4A',total:700,budget:680,progs:[]},
+      {id:'radio',name:'Radios',color:'#B02020',total:400,budget:340,progs:[]},
+    ]},
+  { id:'nws', name:'News Agency Cost', icon:'ti-news', ic:'ic-nws', bar:'bar-nws',
+    alloc:'at-ch1', allocLbl:'Channel 1 only', gl: GL.news, gl2:null,
+    total:1200, budget:1200,
+    desc:'News agency subscription. AZTV only — not allocated to other channels.',
+    channels:[{id:'aztv',name:'AZTV',color:'#1558B0',total:1200,budget:1200,progs:[]}]},
+  { id:'utl', name:'Utility Costs', icon:'ti-bolt', ic:'ic-utl', bar:'bar-utl',
+    alloc:'at-co', allocLbl:'Company level overhead', gl: GL.utility, gl2:null,
+    total:1800, budget:1900,
+    desc:'Electricity, water, heating. Company-level overhead.', channels:[]},
+  { id:'sec', name:'Security', icon:'ti-shield', ic:'ic-sec', bar:'bar-sec',
+    alloc:'at-co', allocLbl:'Company level overhead', gl: GL.security, gl2:null,
+    total:900, budget:900,
+    desc:'Security services. General company overhead.', channels:[]},
+  { id:'bnk', name:'Bank Service', icon:'ti-building-bank', ic:'ic-bnk', bar:'bar-bnk',
+    alloc:'at-co', allocLbl:'Finance cost — company level', gl: GL.bank, gl2:null,
+    total:420, budget:400,
+    desc:'Bank charges, FX, interest. Finance cost.', channels:[]},
+];
+
+const TOTAL_ALL = COST_TYPES.reduce((s,c)=>s+c.total,0); // 26,520
+const BUDGET_ALL = COST_TYPES.reduce((s,c)=>s+c.budget,0);
+
+/* Annex 2 entity rows — cost totals per channel derived from COST_TYPES */
+function getChannelTotal(chId){
+  let t=0, b=0;
+  COST_TYPES.forEach(ct=>{
+    const ch = ct.channels.find(c=>c.id===chId);
+    if(ch){t+=ch.total; b+=ch.budget;}
+  });
+  return {t,b};
+}
+
+// Overhead total (company-level costs)
+function getOverheadTotal(){
+  let t=0,b=0;
+  COST_TYPES.filter(c=>c.channels.length===0).forEach(c=>{t+=c.total;b+=c.budget;});
+  return {t,b};
+}
+
+const CH_CONFIGS = [
+  {id:'aztv',   name:'AZ TV',           color:'#1558B0', r:9.1, dr:true},
+  {id:'medeni', name:'Mədəniyyət TV',    color:'#8A6000', r:9.5, dr:true},
+  {id:'idman',  name:'İdman TV',         color:'#0F7A4A', r:8.2, dr:true},
+  {id:'radio',  name:'Radios',           color:'#B02020', r:5,   dr:false},
+  {id:'social', name:'Social Media',     color:'#5030A0', r:8.5, dr:false},
+];
+
+// Programme totals for Annex 2 channel drill (salary + all cost types summed)
+const A2_PROGS = {
+  aztv:[
+    {id:'busehr', n:'Bu Şəhər',    a:350,  b:250,  r:0.5},
+    {id:'xeber',  n:'AZTV Xəbər', a:970,  b:1200, r:9.2},
+    {id:'hedef',  n:'Hədəf',      a:640,  b:500,  r:5.7},
+    {id:'oth',    n:'Other programmes', a:6040, b:5550, r:null},
+  ],
+  medeni:[
+    {id:'mugam', n:'Muğam Dünyası', a:420, b:400, r:7.2},
+    {id:'ince',  n:'İncəsənət',     a:680, b:750, r:8.8},
+    {id:'film',  n:'Film Gecəsi',   a:310, b:280, r:6.4},
+    {id:'oth_m', n:'Other programmes', a:1390, b:1570, r:null},
+  ],
+  idman:[
+    {id:'futbol',  n:'Futbol Review',      a:900, b:850, r:7.8},
+    {id:'tennis',  n:'Tennis Turniri',     a:520, b:500, r:6.5},
+    {id:'idman_x', n:'İdman Xəbərləri',   a:380, b:400, r:5.9},
+    {id:'oth_i',   n:'Other programmes',  a:2200,b:2000,r:null},
+  ],
+};
+
+const PCS2={
+  xeber:{n:'AZTV Xəbər',cs:[{l:'Salary',g:'gls',gn:'7110',a:700,b:900},{l:'Rent',g:'glr',gn:'7210',a:50,b:100},{l:'Service',g:'glsv',gn:'7460',a:100,b:150},{l:'Depreciation',g:'gld',gn:'7310',a:120,b:50}]},
+  busehr:{n:'Bu Şəhər',cs:[{l:'Salary',g:'gls',gn:'7110',a:160,b:130},{l:'Rent',g:'glr',gn:'7210',a:35,b:40},{l:'Service',g:'glsv',gn:'7460',a:80,b:60},{l:'Depreciation',g:'gld',gn:'7310',a:45,b:30}]},
+  hedef:{n:'Hədəf',cs:[{l:'Salary',g:'gls',gn:'7110',a:310,b:260},{l:'Rent',g:'glr',gn:'7210',a:60,b:80},{l:'Service',g:'glsv',gn:'7460',a:140,b:120},{l:'Depreciation',g:'gld',gn:'7310',a:80,b:40}]},
+  mugam:{n:'Muğam Dünyası',cs:[{l:'Salary',g:'gls',gn:'7110',a:200,b:190},{l:'Service',g:'glsv',gn:'7460',a:120,b:100},{l:'Depreciation',g:'gld',gn:'7310',a:60,b:50}]},
+  futbol:{n:'Futbol Review',cs:[{l:'Salary',g:'gls',gn:'7110',a:430,b:400},{l:'Service',g:'glsv',gn:'7460',a:220,b:200},{l:'Depreciation',g:'gld',gn:'7310',a:90,b:70}]},
+};
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+let a1Level=0, a1Cost=null, a1Channel=null, a1Prog=null;
+
+function sp(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.ntab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('t-'+p).classList.add('active');
+  if(p==='a2') bEnt();
+}
+
+function fmtK(n){
+  if(n>=1000) return (n/1000).toFixed(1).replace(/\.0$/,'')+'M';
+  return n.toLocaleString('en-US')+' K';
+}
+function fmtKs(n){ return n.toLocaleString('en-US')+' K'; }
+function vp(a,b){return((a-b)/b*100)}
+function vfmt(a,b){const v=vp(a,b);return{s:(v>0?'+':'')+v.toFixed(1)+'%',c:v>0?'vpos':'vneg'}}
+function vfmt2(a,b){const v=vp(a,b);return{s:(v>0?'+':'')+v.toFixed(0)+'%',c:v>0?'vp2':'vn2'}}
+
+/* ============================================================
+   ANNEX 1
+   ============================================================ */
+function renderA1(){renderBC();renderSummary();renderTable();}
+
+function renderBC(){
+  const bc=document.getElementById('a1-bc');
+  let p=[];
+  p.push(`<div class="bc-item ${a1Level===0?'active':''}" onclick="goLevel(0)"><i class="ti ti-home"></i>All costs</div>`);
+  if(a1Level>=1&&a1Cost){p.push(`<span class="bc-sep"><i class="ti ti-chevron-right"></i></span><div class="bc-item ${a1Level===1?'active':''}" onclick="goLevel(1)"><i class="ti ${a1Cost.icon}"></i>${a1Cost.name}</div>`);}
+  if(a1Level>=2&&a1Channel){p.push(`<span class="bc-sep"><i class="ti ti-chevron-right"></i></span><div class="bc-item ${a1Level===2?'active':''}" onclick="goLevel(2)"><i class="ti ti-device-tv"></i>${a1Channel.name}</div>`);}
+  if(a1Level>=3&&a1Prog){p.push(`<span class="bc-sep"><i class="ti ti-chevron-right"></i></span><div class="bc-item active"><i class="ti ti-player-play"></i>${a1Prog.name}</div>`);}
+  bc.innerHTML=p.join('');
+}
+
+function renderSummary(){
+  const sg=document.getElementById('a1-sum');
+  let items;
+  if(a1Level===0){
+    const v=vfmt(TOTAL_ALL,BUDGET_ALL);
+    items=[
+      {val:fmtK(TOTAL_ALL),lbl:'Total cost',sub:"AZN '000 · All categories",col:null},
+      {val:fmtK(BUDGET_ALL),lbl:'Budget',sub:'Full year plan',col:'var(--text3)'},
+      {val:v.s,lbl:'Variance',sub:'Actual vs budget',col:v.c==='vpos'?'var(--green)':'var(--red)'},
+      {val:COST_TYPES.length,lbl:'Cost categories',sub:'In scope per NAS/IFRS',col:null},
+    ];
+  } else if(a1Level===1&&a1Cost){
+    const v=vfmt(a1Cost.total,a1Cost.budget);
+    items=[
+      {val:fmtKs(a1Cost.total),lbl:a1Cost.name,sub:"Total AZN '000",col:null},
+      {val:fmtKs(a1Cost.budget),lbl:'Budget',sub:'Full year',col:'var(--text3)'},
+      {val:v.s,lbl:'Variance',sub:'vs budget',col:v.c==='vpos'?'var(--green)':'var(--red)'},
+      {val:a1Cost.gl.num,lbl:'GL account',sub:a1Cost.gl.name.substring(0,30)+'...',col:'#2040A0'},
+    ];
+  } else if(a1Level===2&&a1Channel){
+    const v=vfmt(a1Channel.total,a1Channel.budget);
+    items=[
+      {val:fmtKs(a1Channel.total),lbl:a1Channel.name+' — '+a1Cost.name,sub:"AZN '000",col:null},
+      {val:fmtKs(a1Channel.budget),lbl:'Budget',sub:'Full year',col:'var(--text3)'},
+      {val:v.s,lbl:'Variance',sub:'vs budget',col:v.c==='vpos'?'var(--green)':'var(--red)'},
+      {val:a1Channel.progs?a1Channel.progs.length:'N/A',lbl:'Programmes',sub:'With this cost type',col:null},
+    ];
+  } else if(a1Level===3&&a1Prog){
+    const v=vfmt(a1Prog.total,a1Prog.budget);
+    items=[
+      {val:fmtKs(a1Prog.total),lbl:a1Prog.name,sub:"Total salary AZN '000",col:null},
+      {val:fmtKs(a1Prog.budget),lbl:'Budget',sub:'Full year',col:'var(--text3)'},
+      {val:v.s,lbl:'Variance',sub:'vs budget',col:v.c==='vpos'?'var(--green)':'var(--red)'},
+      {val:a1Prog.eps?a1Prog.eps.length+'+ shown':'—',lbl:'Episodes',sub:'Sample shown below',col:null},
+    ];
+  }
+  sg.innerHTML=items.map(i=>`<div class="sum-card"><div class="sum-val" style="${i.col?'color:'+i.col:''}">${i.val}</div><div class="sum-lbl">${i.lbl}</div><div class="sum-sub">${i.sub}</div></div>`).join('');
+}
+
+function renderTable(){
+  const tbl=document.getElementById('a1-table');
+  const title=document.getElementById('a1-table-title');
+  const sub=document.getElementById('a1-table-sub');
+  const hint=document.getElementById('a1-hint');
+
+  if(a1Level===0){
+    title.innerHTML=`<i class="ti ti-table"></i>Total cost by category — AZ TV Group`;
+    sub.textContent="AZN '000 · Full year · Illustrative";
+    hint.innerHTML=`<i class="ti ti-hand-click"></i>Click a cost category to see channel breakdown`;
+    let h=`<thead><tr>
+      <th style="text-align:left;width:30%">Cost category</th>
+      <th style="text-align:left;width:10%">GL account</th>
+      <th style="text-align:left;width:13%">Allocation</th>
+      <th>Actual</th><th>Budget</th><th>Variance</th>
+      <th style="min-width:160px">Share of total</th>
+    </tr></thead><tbody>`;
+    COST_TYPES.forEach(c=>{
+      const v=vfmt(c.total,c.budget);
+      const pct=Math.round(c.total/TOTAL_ALL*100);
+      const hasDrill=c.channels.length>0;
+      h+=`<tr class="pnl-row ${hasDrill?'clickable':''}" ${hasDrill?`onclick="drillCostType('${c.id}')"`:''}">
+        <td><div class="cost-label">
+          <div class="cost-icon ${c.ic}"><i class="ti ${c.icon}"></i></div>
+          <div><div class="cost-name">${c.name}</div><div class="cost-sub">${c.desc}</div></div>
+        </div></td>
+        <td><span class="gl-num">${c.gl.num}</span>${c.gl2?`<br><span class="gl-num" style="margin-top:3px;display:inline-block">${c.gl2.num}</span>`:''}</td>
+        <td><span class="alloc-tag ${c.alloc}">${c.allocLbl}</span></td>
+        <td class="num">${fmtKs(c.total)}</td>
+        <td class="num-muted">${fmtKs(c.budget)}</td>
+        <td class="${v.c}">${v.s}</td>
+        <td><div class="bar-cell"><div class="bar-wrap"><div class="bar-fill ${c.bar}" style="width:${pct}%"></div></div><span class="bar-pct">${pct}%</span></div></td>
+      </tr>`;
+    });
+    const vt=vfmt(TOTAL_ALL,BUDGET_ALL);
+    h+=`<tr class="pnl-row total"><td><div class="cost-label"><div><div class="cost-name">Total costs</div></div></div></td><td></td><td></td><td class="num">${fmtKs(TOTAL_ALL)}</td><td class="num-muted">${fmtKs(BUDGET_ALL)}</td><td class="${vt.c}">${vt.s}</td><td><div class="bar-cell"><div class="bar-wrap"><div class="bar-fill bar-sal" style="width:100%"></div></div><span class="bar-pct">100%</span></div></td></tr></tbody>`;
+    tbl.innerHTML=h;
+
+  } else if(a1Level===1&&a1Cost){
+    title.innerHTML=`<i class="ti ${a1Cost.icon}"></i>${a1Cost.name} — by channel &nbsp;<span class="gl-num">${a1Cost.gl.num}</span>`;
+    sub.textContent="AZN '000 · Full year";
+    hint.innerHTML=`<i class="ti ti-hand-click"></i>Click a channel to see programme breakdown`;
+    let h=`<thead><tr>
+      <th style="text-align:left;width:40%">Channel (CC1)</th>
+      <th>Actual</th><th>Budget</th><th>Variance</th>
+      <th style="min-width:160px">Share of ${a1Cost.name}</th>
+    </tr></thead><tbody>`;
+    a1Cost.channels.forEach(ch=>{
+      const v=vfmt(ch.total,ch.budget);
+      const pct=Math.round(ch.total/a1Cost.total*100);
+      const hasDrill=ch.progs&&ch.progs.length>0;
+      h+=`<tr class="pnl-row ${hasDrill?'clickable':''}" ${hasDrill?`onclick="drillChannel('${ch.id}')"`:''}">
+        <td><div class="item-label">
+          <div class="item-dot" style="background:${ch.color}"></div>
+          <div><div class="item-name">${ch.name}</div><div class="item-sub">${hasDrill?'Click to see programmes':'Direct allocation'}</div></div>
+          ${hasDrill?'<i class="ti ti-chevron-right" style="font-size:11px;color:var(--text3);margin-left:auto"></i>':''}
+        </div></td>
+        <td class="num">${fmtKs(ch.total)}</td><td class="num-muted">${fmtKs(ch.budget)}</td>
+        <td class="${v.c}">${v.s}</td>
+        <td><div class="bar-cell"><div class="bar-wrap"><div class="bar-fill ${a1Cost.bar}" style="width:${pct}%"></div></div><span class="bar-pct">${pct}%</span></div></td>
+      </tr>`;
+    });
+    const vt=vfmt(a1Cost.total,a1Cost.budget);
+    h+=`<tr class="pnl-row total"><td><div class="item-name">Total — ${a1Cost.name}</div></td><td class="num">${fmtKs(a1Cost.total)}</td><td class="num-muted">${fmtKs(a1Cost.budget)}</td><td class="${vt.c}">${vt.s}</td><td></td></tr></tbody>`;
+    tbl.innerHTML=h;
+
+  } else if(a1Level===2&&a1Channel){
+    title.innerHTML=`<i class="ti ti-player-play"></i>${a1Cost.name} — ${a1Channel.name} — by programme (CC2)`;
+    sub.textContent="AZN '000 · Full year";
+    hint.innerHTML=`<i class="ti ti-hand-click"></i>Click a programme to see episode detail (CC3) with CC4 breakdown`;
+    let h=`<thead><tr>
+      <th style="text-align:left;width:40%">Programme (CC2)</th>
+      <th>Actual</th><th>Budget</th><th>Variance</th>
+      <th style="min-width:160px">Share of ${a1Channel.name}</th>
+    </tr></thead><tbody>`;
+    a1Channel.progs.forEach(p=>{
+      const v=vfmt(p.total,p.budget);
+      const pct=Math.round(p.total/a1Channel.total*100);
+      const hasDrill=p.eps&&p.eps.length>0;
+      h+=`<tr class="pnl-row ${hasDrill?'clickable':''}" ${hasDrill?`onclick="drillProg('${p.id}')"`:''}">
+        <td><div class="item-label">
+          <div class="item-dot" style="background:#3B8FE8"></div>
+          <div><div class="item-name">${p.name}</div><div class="item-sub">${hasDrill?'Click for episode + CC4 detail':'Annual total'}</div></div>
+          ${hasDrill?'<i class="ti ti-chevron-right" style="font-size:11px;color:var(--text3);margin-left:auto"></i>':''}
+        </div></td>
+        <td class="num">${fmtKs(p.total)}</td><td class="num-muted">${fmtKs(p.budget)}</td>
+        <td class="${v.c}">${v.s}</td>
+        <td><div class="bar-cell"><div class="bar-wrap"><div class="bar-fill ${a1Cost.bar}" style="width:${pct}%"></div></div><span class="bar-pct">${pct}%</span></div></td>
+      </tr>`;
+    });
+    const vt=vfmt(a1Channel.total,a1Channel.budget);
+    h+=`<tr class="pnl-row total"><td><div class="item-name">Total — ${a1Channel.name}</div></td><td class="num">${fmtKs(a1Channel.total)}</td><td class="num-muted">${fmtKs(a1Channel.budget)}</td><td class="${vt.c}">${vt.s}</td><td></td></tr></tbody>`;
+    tbl.innerHTML=h;
+
+  } else if(a1Level===3&&a1Prog){
+    title.innerHTML=`<i class="ti ti-calendar-event"></i>${a1Cost.name} — ${a1Prog.name} — episode detail (CC3 + CC4)`;
+    sub.textContent="AZN '000 · Sample episodes (illustrative)";
+    hint.innerHTML=`<i class="ti ti-info-circle"></i>CC3 = episode/day cost object &nbsp;·&nbsp; CC4 = contributing department`;
+    let h=`<thead><tr>
+      <th style="text-align:left;width:35%">Episode (CC3)</th>
+      <th style="text-align:left;width:18%">Dept. (CC4)</th>
+      <th>Actual</th><th>Budget</th><th>Variance</th>
+      <th>vs budget</th>
+    </tr></thead><tbody>`;
+    a1Prog.eps.forEach(e=>{
+      const v=vfmt(e.a,e.b);
+      const pct=Math.min(100,Math.round(e.a/e.b*100));
+      h+=`<tr class="pnl-row">
+        <td><div class="ep-label"><span class="ep-badge">CC3</span><span style="font-weight:500;font-size:13px">${e.ep}</span></div></td>
+        <td><span class="cc4-badge">${e.cc4}</span></td>
+        <td class="num">${e.a} K</td><td class="num-muted">${e.b} K</td>
+        <td class="${v.c}">${v.s}</td>
+        <td><div class="bar-cell"><div class="bar-wrap"><div class="bar-fill ${a1Cost.bar}" style="width:${pct}%"></div></div><span class="bar-pct">${pct}%</span></div></td>
+      </tr>`;
+    });
+    const totA=a1Prog.eps.reduce((s,e)=>s+e.a,0);
+    const totB=a1Prog.eps.reduce((s,e)=>s+e.b,0);
+    const vt=vfmt(totA,totB);
+    h+=`<tr class="pnl-row subtotal"><td><span style="font-size:12px;color:var(--text3)">Sample total (${a1Prog.eps.length} episodes shown)</span></td><td></td><td class="num">${totA} K</td><td class="num-muted">${totB} K</td><td class="${vt.c}">${vt.s}</td><td></td></tr>
+    <tr class="pnl-row total"><td><div class="item-name">Full year total — ${a1Prog.name}</div></td><td></td><td class="num">${fmtKs(a1Prog.total)}</td><td class="num-muted">${fmtKs(a1Prog.budget)}</td><td class="${vfmt(a1Prog.total,a1Prog.budget).c}">${vfmt(a1Prog.total,a1Prog.budget).s}</td><td></td></tr></tbody>`;
+    tbl.innerHTML=h;
+  }
+}
+
+function goLevel(lvl){a1Level=lvl;if(lvl===0){a1Cost=null;a1Channel=null;a1Prog=null}else if(lvl===1){a1Channel=null;a1Prog=null}else if(lvl===2){a1Prog=null}renderA1();}
+function drillCostType(id){a1Cost=COST_TYPES.find(c=>c.id===id);a1Level=1;a1Channel=null;a1Prog=null;renderA1();}
+function drillChannel(id){a1Channel=a1Cost.channels.find(c=>c.id===id);a1Level=2;a1Prog=null;renderA1();}
+function drillProg(id){a1Prog=a1Channel.progs.find(p=>p.id===id);a1Level=3;renderA1();}
+
+/* ============================================================
+   ANNEX 2
+   ============================================================ */
+function rh(r){return r?`<div class="ratw"><div class="ratb"><div class="ratf" style="width:${r/10*100}%"></div></div><span class="ratv">${r}</span></div>`:'<span style="color:var(--text3);font-size:11px">n/a</span>'}
+let selCh2=null;
+
+function bEnt(){
+  let ta=0,tb=0;
+  let h=`<thead><tr><th>Channel / Unit</th><th>Actual</th><th>Budget</th><th>Variance</th><th>Rating</th><th>Actual / Rating</th></tr></thead><tbody>`;
+  CH_CONFIGS.forEach(r=>{
+    const tot=getChannelTotal(r.id);
+    const v=vfmt2(tot.t,tot.b);
+    const ar=r.r?(tot.t/r.r).toFixed(0):'—';
+    const cls=r.dr?'cr':'';
+    const oc=r.dr?`onclick="drCh2('${r.id}',this)"`:''
+    h+=`<tr class="${cls}" ${oc}><td><div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:50%;background:${r.color}"></div><span style="font-weight:600">${r.name}</span>${r.dr?'<i class="ti ti-chevron-right" style="font-size:11px;color:var(--text3);margin-left:auto"></i>':''}</div></td><td class="act">${fmtKs(tot.t)}</td><td class="bud">${fmtKs(tot.b)}</td><td><span class="${v.c}">${v.s}</span></td><td>${rh(r.r)}</td><td style="font-family:var(--mono);font-size:12px;color:var(--text2)">${ar!=='—'?ar:ar}</td></tr>`;
+    ta+=tot.t;tb+=tot.b;
+  });
+  // Add overhead
+  const oh=getOverheadTotal();
+  const voh=vfmt2(oh.t,oh.b);
+  h+=`<tr><td><div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:50%;background:#5A6878"></div><span style="font-weight:600">Overheads (company-level)</span></div></td><td class="act">${fmtKs(oh.t)}</td><td class="bud">${fmtKs(oh.b)}</td><td><span class="${voh.c}">${voh.s}</span></td><td>—</td><td>—</td></tr>`;
+  ta+=oh.t;tb+=oh.b;
+  const tv=vfmt2(ta,tb);
+  h+=`</tbody><tfoot><tr class="totr"><td>Total</td><td class="act">${fmtKs(ta)}</td><td class="bud">${fmtKs(tb)}</td><td><span class="${tv.c}">${tv.s}</span></td><td></td><td></td></tr></tfoot>`;
+  document.getElementById('et').innerHTML=h;
+}
+
+function drCh2(id,el){
+  selCh2=id;
+  document.querySelectorAll('#et .cr').forEach(r=>r.classList.remove('sel'));
+  el.classList.add('sel');
+  const cfg=CH_CONFIGS.find(c=>c.id===id);
+  document.getElementById('ch-title').textContent='Report of channel — '+cfg.name;
+  document.getElementById('ch-sub').textContent=cfg.name+" · AZN '000";
+  document.getElementById('ch-ph').style.display='none';
+  document.getElementById('ch-ct').style.display='block';
+  closePD();
+  const ps=A2_PROGS[id]||[];
+  let tot_a=0,tot_b=0;
+  let h=`<thead><tr><th>Programme</th><th>Actual</th><th>Budget</th><th>Variance</th><th>Rating</th><th>Actual / Rating</th></tr></thead><tbody>`;
+  ps.forEach(p=>{
+    const v=vfmt2(p.a,p.b);
+    const hd=!!PCS2[p.id];
+    const ar=p.r?(p.a/p.r).toFixed(0):'—';
+    const cls=hd?'cr':'';
+    const oc=hd?`onclick="drProg2('${p.id}','${id}',this)"`:''
+    h+=`<tr class="${cls}" ${oc}><td><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:${cfg.color}"></div><span style="${hd?'font-weight:600':'color:var(--text2)'}">${p.n}</span>${hd?'<i class="ti ti-chevron-right" style="font-size:11px;color:var(--text3);margin-left:auto"></i>':''}</div></td><td class="act">${fmtKs(p.a)}</td><td class="bud">${fmtKs(p.b)}</td><td><span class="${v.c}">${v.s}</span></td><td>${rh(p.r)}</td><td style="font-family:var(--mono);font-size:12px;color:var(--text2)">${ar!=='—'?ar:ar}</td></tr>`;
+    tot_a+=p.a;tot_b+=p.b;
+  });
+  const tv=vfmt2(tot_a,tot_b);
+  h+=`</tbody><tfoot><tr class="totr"><td>Total</td><td class="act">${fmtKs(tot_a)}</td><td class="bud">${fmtKs(tot_b)}</td><td><span class="${tv.c}">${tv.s}</span></td><td></td><td></td></tr></tfoot>`;
+  document.getElementById('cht').innerHTML=h;
+}
+
+function drProg2(id,chId,el){
+  document.querySelectorAll('#cht .cr').forEach(r=>r.classList.remove('sel'));
+  el.classList.add('sel');
+  const pd=PCS2[id];if(!pd)return;
+  document.getElementById('pt').textContent='Programme report — '+pd.n;
+  const d=document.getElementById('pdd');d.classList.add('open');d.scrollIntoView({behavior:'smooth',block:'nearest'});
+  let ta=0,tb=0;
+  let h=`<thead><tr><th>GL account</th><th>GL #</th><th>Actual</th><th>Budget</th><th>Variance</th></tr></thead><tbody>`;
+  pd.cs.forEach(c=>{
+    const v=vfmt2(c.a,c.b);
+    h+=`<tr><td><div style="display:flex;align-items:center"><div class="gl-dot ${c.g}"></div>${c.l}</div></td><td><span class="gl-num">${c.gn}</span></td><td class="act">${fmtKs(c.a)}</td><td class="bud">${fmtKs(c.b)}</td><td><span class="${v.c}">${v.s}</span></td></tr>`;
+    ta+=c.a;tb+=c.b;
+  });
+  const tv=vfmt2(ta,tb);
+  h+=`</tbody><tfoot><tr class="totr"><td>Total</td><td></td><td class="act">${fmtKs(ta)}</td><td class="bud">${fmtKs(tb)}</td><td><span class="${tv.c}">${tv.s}</span></td></tr></tfoot>`;
+  document.getElementById('pct').innerHTML=h;
+  const cfg=CH_CONFIGS.find(c=>c.id===chId);
+  const prog=A2_PROGS[chId]?A2_PROGS[chId].find(p=>p.id===id):null;
+  const rat=prog?prog.r:9.2;
+  const vnum=vp(ta,tb);
+  const kpis=[
+    {v:fmtKs(ta),l:'Actual cost',s:"AZN '000",col:null},
+    {v:(vnum>0?'+':'')+vnum.toFixed(1)+'%',l:'Variance vs budget',s:'vs '+fmtKs(tb)+' budget',col:vnum<0?'var(--red)':'var(--green)'},
+    {v:rat,l:'Audience rating',s:'out of 10.0',col:'var(--blue2)'},
+    {v:(ta/rat).toFixed(0)+' K',l:'Cost per rating point',s:"AZN '000",col:null},
+    {v:(ta/rat/100).toFixed(2),l:'AZN per 1k viewers',s:'Estimated',col:null},
+    {v:vnum<-15?'Review needed':vnum>10?'Over-delivering':'On track',l:'Budget status',s:'Management indicator',col:vnum<-15?'var(--red)':vnum>10?'var(--blue2)':'var(--green)'},
+  ];
+  document.getElementById('pkpi').innerHTML=kpis.map(k=>`<div class="kcard"><div class="kval" style="${k.col?'color:'+k.col:''}">${k.v}</div><div class="klbl">${k.l}</div><div class="ksub">${k.s}</div></div>`).join('');
+}
+function closePD(){document.getElementById('pdd').classList.remove('open');document.querySelectorAll('#cht .cr').forEach(r=>r.classList.remove('sel'));}
+
+/* INIT */
+renderA1();
+</script>
+</body>
+</html>
